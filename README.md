@@ -16,7 +16,8 @@ sudo groupadd docker
 sudo usermod -aG docker lbbxsxlz
 
 ## docker运行
-docker run --name lbbxsxlz_docker_test -i -t ubuntu /bin/bash 或
+docker run --name lbbxsxlz_docker_test -i -t ubuntu /bin/bash
+或
 docker start lbbxsxlz_docker_test
 docker attach lbbxsxlz_docker_test
 
@@ -28,9 +29,15 @@ docker kill cf8027c5ffbb
 docker run --name lbbxsxlz_docker_test_daemon -d ubuntu /bin/sh -c "while true; do echo hello world;sleep 1;done"
 
 ## 显示容器信息
-docker ps -a 
-docker ps -n $x  显示最近$x个容器
-docker ps -a -q  只显示容器的ID
+docker ps -a
+显示最近$x个容器
+''' 
+docker ps -n $x
+'''
+显示容器的ID
+'''
+docker ps -a -q
+'''
 
 ## 容器内日志获取
 docker logs lbbxsxlz_docker_test_daemon
@@ -54,5 +61,12 @@ docker inspect --format '{{.Id}} {{.Name}}' lbbxsxlz_docker_test
 
 ## 容器删除 
 docker rm $id/$name
-docker rm -f $id  可以删除运行中的容器
-docker rm `docker ps -a -q`  删除所有的容器
+删除运行中的容器
+''' 
+docker rm -f $id
+'''
+
+删除所有的容器
+'''
+docker rm `docker ps -a -q`
+'''

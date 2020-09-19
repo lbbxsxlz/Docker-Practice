@@ -10,6 +10,8 @@ docker network create app-net
 ```
 docker run -d --net=app-net --name db lbbxsxlz/ubuntu_16.04:redis-server
 ```
+db容器的构建见上级目录redis中的Dockerfile
+
 ### 运行webapp-redis容器
 ```
 docker run -p 4567 --net=app-net --name webapp-redis -t -i -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp /bin/bash

@@ -1,6 +1,5 @@
 # web redis 容器连接
-
-## 1、Docker Networking
+g## 1、Docker Networking
 
 ### 创建docker网络
 ```
@@ -20,7 +19,7 @@ docker run -p 4567 --net=app-net --name webapp-redis -t -i -v $PWD/webapp_redis:
 ```
 nohup /opt/webapp/bin/webapp &
 ```
-### webapp-redis容器的另一种启动防守
+### webapp-redis容器的另一种启动方式
 ```
 docker run -d -p 4567 --net=app-net --name webapp-redis -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp
 ```
@@ -60,3 +59,27 @@ Connection: Keep-Alive
 
 "[{\"name\":\"lbbxsxlz\",\"status\":\"Testing\"}]"
 
+
+## 2、Docker链接
+### 运行redis容器
+```
+docker run -d --name redis lbbxsxlz/ubuntu_16.04:redis-server
+```
+
+### 运行webapp-redis容器
+```
+docker run -p 4567 --name webapp-link --link redis:db -t -i -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp /bin/bash
+```
+
+### 在容器内部运行应用
+```
+nohup /opt/webapp/bin/webapp &
+```
+
+### webapp-redis容器的另一种启动方式
+```
+docker run -d -p 4567 --name webapp-link --link redis:db -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp
+```
+
+### 测试
+测试方式与上文一致，唯一区别的端口

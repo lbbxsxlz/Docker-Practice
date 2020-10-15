@@ -71,6 +71,7 @@ docker inspect lbbxsxlz_docker_test
 docker inspect lbbxsxlz_docker_test --format='{{.Id}}'
 docker inspect lbbxsxlz_docker_test --format='{{.NetworkSettings.Networks.bridge}}'
 docker inspect --format '{{.Id}} {{.Name}}' lbbxsxlz_docker_test
+docker images --format "{{.Repository}}: {{.Tag}}: {{.Size}}"
 ```
 ## 容器删除 
 ```

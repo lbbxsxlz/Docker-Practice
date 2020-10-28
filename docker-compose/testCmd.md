@@ -34,10 +34,10 @@ docker-compose logs
 ## 停止服务，仅停止容器
 docker-compose stop
 
-## 删除服务
+## 删除服务，删除容器与网络
 docker-compose rm
 
-## 停止服务，仅留下镜像、卷、源码
+## 停止服务，删除容器、网络，留下镜像、卷、源码
 docker-compose down
 
 ## 查找卷的挂载点

@@ -1,11 +1,26 @@
-version: '3'
+version: "3.5"
 services:
-  web:
-    image: jamtur01/composeapp
+  web-server:
+    image: "lbbxsxlz/python:3.5"
+    build: .
     command: python app.py
     ports:
-     - "5000:5000"
+      - target: 5000
+        published: 5000
+    networks:
+      - counter-net
     volumes:
-     - .:/composeapp
+      - type: volume
+        source: counter-vol
+        target: /counter-code
   redis:
-    image: redis
+    image: "redis"
+    networks:
+      counter-net:
+
+networks:
+  counter-net:
+
+volumes:
+  counter-vol:
+

@@ -29,6 +29,9 @@ docker swarm join-token worker
 ## 获取管理节点
 docker swarm join-token manager
 
+
+P.S. 以上操作均在管理节点上操作，以下操作在工作节点操作
+
 ## 加入工作节点
 docker swarm join --token $token $managerIp:port --advertise-addr $localhostip:port --listen-addr $localhostip:port
 

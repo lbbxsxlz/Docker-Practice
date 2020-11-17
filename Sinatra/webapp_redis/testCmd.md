@@ -7,13 +7,13 @@ docker network create app-net
 ```
 ### 运行redis容器
 ```
-docker run -d --net=app-net --name db lbbxsxlz/ubuntu_16.04:redis-server
+docker run -d --net=app-net(--network app-net) --name db lbbxsxlz/ubuntu_16.04:redis-server
 ```
 redis db容器的构建见上级目录redis中的Dockerfile
 
 ### 运行webapp-redis容器
 ```
-docker run -p 4567 --net=app-net --name webapp-redis -t -i -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp /bin/bash
+docker run -p 4567 --net=app-net(--network app-net) --name webapp-redis -t -i -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp /bin/bash
 ```
 ### 在容器内部运行应用
 ```
@@ -21,7 +21,7 @@ nohup /opt/webapp/bin/webapp &
 ```
 ### webapp-redis容器的另一种启动方式
 ```
-docker run -d -p 4567 --net=app-net --name webapp-redis -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp
+docker run -d -p 4567 --net=app-net(--network app-net) --name webapp-redis -v $PWD/webapp_redis:/opt/webapp lbbxsxlz/ubuntu_16.04_webapp
 ```
 
 ### 测试

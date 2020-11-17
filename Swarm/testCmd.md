@@ -35,3 +35,43 @@ P.S. 以上操作均在管理节点上操作，以下操作在工作节点操作
 ## 加入工作节点
 docker swarm join --token $token $managerIp:port --advertise-addr $localhostip:port --listen-addr $localhostip:port
 
+## 启用锁
+docker swarm init --autolock
+docker swarm update --autolock=true
+
+## 解锁swarm
+docker swarm unlock
+
+# 服务
+## 创建服务
+docker service create --name $name -p 8080:8080 --replicas 5 $dockeImagesName
+部署全局服务，添加以下参数，默认是副本模式
+--mode global 
+
+## 查看swarm运行的服务 
+docker service ls
+
+## 查看服务副本与状态
+docker service ps $name
+
+## 查看服务的详细信息
+docker service inspect --pretty $name
+
+## 服务扩容与缩容
+docker service scale $name=$num
+
+## 删除服务
+docker service rm $name
+
+# 服务升级demo
+docker network create -d overlay uber-net
+
+docker service create --name uber-svc --network uber-net -p 80:80 --replicas 12 demo:v1
+
+docker service create --name uber-svc --network uber-net --publish published=80,target=80,mode=host --replicas 12 demo:v1  #主机模式
+
+docker service update --image demo:v2 --update-parallelism 2 --update-delay 20s uber-svc
+
+## 服务日志
+docker service logs
+

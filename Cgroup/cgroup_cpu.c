@@ -1,3 +1,7 @@
+/*
+cgroup cpu test
+*/
+
 #define _GNU_SOURCE
 
 #include <pthread.h>
@@ -27,6 +31,7 @@ void *thread_main(void *threadid)
     int a=0; 
     while(1) {
         a++;
+        sleep(1);
     }
     pthread_exit(NULL);
 }

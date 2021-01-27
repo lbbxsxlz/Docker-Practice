@@ -3,4 +3,7 @@ LABEL maintainer="lbbxsxlz@gmail.com"
 ENV REFRESHED_AT 2021-01-27
 RUN apt-get update
 RUN apt-get -y install gcc
-
+RUN mkdir -p /opt/project
+VOLUME /opt/project/
+WORKDIR /opt/project/
+CMD ["/bin/bash"]

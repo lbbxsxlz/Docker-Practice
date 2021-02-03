@@ -5,7 +5,7 @@ Linux Namespace是Linux提供的一种内核级别环境隔离的方法。很早
 
 Linux Namespace 有如下种类，官方文档在这里[Namespace in Operation](https://lwn.net/Articles/531114/)
 
-![Namespace种类](Namespace.jpg)
+![Namespace种类](pic/Namespace.jpg)
 主要是三个系统调用:
 
 clone() – 实现线程的系统调用，用来创建一个新的进程，并可以通过设计上述参数达到隔离。<br>
@@ -18,7 +18,7 @@ setns() – 把某进程加入到某个namespace <br>
 ### what is docker ?
 “Docker”是一家公司，这一词也会用于指代开源 Docker 项目。其中包含一系列可以从 Docker 官网下载和安装的工具，比如 Docker 服务端和 Docker 客户端。
 
-![docker](docker.jpg)
+![docker](pic/docker.jpg)
 
 该项目在 2017 年于 Austin 举办的 DockerCon 上正式命名为 Moby 项目。由于这次改名，GitHub 上的 docker/docker 库也被转移到了 [moby/moby](https://github.com/moby/moby)。
 
@@ -89,7 +89,7 @@ int main()
 ```
 在docker容器中编译此代码，运行程序。
 
-![clone](clone.jpg)
+![clone](pic/clone.jpg)
 
 上面的程序和pthread基本上是一样的玩法。但是，对于上面的程序，父子进程的进程空间是没有什么差别的，父进程能访问到的子进程也能。
 
@@ -117,7 +117,7 @@ int main()
 ```
 运行添加UTS namespace flag的程序。
 
-![uts](uts.jpg)
+![uts](pic/uts.jpg)
 
 ## IPC Namespace
 IPC全称 Inter-Process Communication，是Unix/Linux下进程间通信的一种方式，IPC有共享内存、信号量、消息队列等方法。为了隔离，我们也需要把IPC给隔离开来，这样，只有在同一个Namespace下的进程才能相互通信。IPC需要有一个全局的ID，即然是全局的，那么就意味着我们的Namespace需要对这个ID隔离，不能让别的Namespace的进程看到。
@@ -138,15 +138,15 @@ int main()
 
 先在容器中创建一个IPC的Queue，效果如下：
 
-![ipc1](ipc1.jpg)
+![ipc1](pic/ipc1.jpg)
 
 我们先看运行之前的uts的隔离程序，看下结果，ipc未被隔离。
 
-![ipc2](ipc2.jpg)
+![ipc2](pic/ipc2.jpg)
 
 我们再运行，添加了IPC隔离的程序，发现IPC隔离生效了。
 
-![ipc3](ipc3.jpg)
+![ipc3](pic/ipc3.jpg)
 
 ## PID Namespace
 在uts隔离的基础上修改程序。
@@ -173,7 +173,7 @@ int main()
 ```
 运行结果如下：
 
-![pid](pid.jpg)
+![pid](pic/pid.jpg)
 
 在传统的UNIX系统中，PID为1的进程是init，地位非常特殊。他作为所有进程的父进程，有很多特权（比如：屏蔽信号等），另外，其还会为检查所有进程的状态，我们知道，如果某个子进程脱离了父进程（父进程没有wait它），那么init就会负责回收资源并结束这个子进程。所以，要做到进程空间的隔离，首先要创建出PID为1的进程，最好就像chroot那样，把子进程的PID在容器内变成1。
 
@@ -208,7 +208,7 @@ int main()
 
 由于我们的测试均运行在容器上，容器本身的进程与proc文件系统都比较简单，直接运行程序并不能明显的看出效果，因此通过增加运行clone程序来使进程与proc文件系统稍稍变得复杂。测试结果如下：
 
-![mount](mount.jpg)
+![mount](pic/mount.jpg)
 
 在通过CLONE_NEWNS创建mount namespace后，父进程会把自己的文件结构复制给子进程中。而子进程中新的namespace中的所有mount操作都只影响自身的文件系统，而不对外界产生任何影响。这样可以做到比较严格地隔离。
 
@@ -344,7 +344,7 @@ int main()
 我们用了一个pipe来对父子进程进行同步，为什么要这样做？因为子进程中有一个execv的系统调用，这个系统调用会把当前子进程的进程空间给全部覆盖掉，我们希望在execv之前就做好user namespace的uid/gid的映射，这样，execv运行的/bin/bash就会因为我们设置了uid为0的inside-uid而变成#号的提示符。
 
 程序的运行结果：
-![user](user.jpg)
+![user](pic/user.jpg)
 
 以上程序是在宿主机上运行的，并不是在容器中运行的。
 

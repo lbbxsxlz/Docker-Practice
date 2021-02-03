@@ -9,6 +9,5 @@ ref. Docker Deep Dive book
 
 Docker 背后深层次原理
 
-[Namespace](Namespace)
+[Namespace](DemoShow/Linux_Namespace_Introduce.md)
 
-[ControlGroup](Cgroup)

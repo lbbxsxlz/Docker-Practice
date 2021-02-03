@@ -1,11 +1,13 @@
 # Linux Namespace Introduce
 
 ## Namespace
+
 Linux Namespace是Linux提供的一种内核级别环境隔离的方法。很早以前的Unix有一个叫chroot的系统调用（通过修改根目录把用户jail到一个特定目录下），chroot提供了一种简单的隔离模式：chroot内部的文件系统无法访问外部的内容。Linux Namespace在此基础上，提供了对UTS、IPC、mount、PID、network、User等的隔离机制。
 
 Linux Namespace 有如下种类，官方文档在这里[Namespace in Operation](https://lwn.net/Articles/531114/)
 
 ![Namespace种类](pic/Namespace.jpg)
+
 主要是三个系统调用:
 
 clone() – 实现线程的系统调用，用来创建一个新的进程，并可以通过设计上述参数达到隔离。<br>
@@ -16,6 +18,7 @@ setns() – 把某进程加入到某个namespace <br>
 
 ## Test Environment
 ### what is docker ?
+
 “Docker”是一家公司，这一词也会用于指代开源 Docker 项目。其中包含一系列可以从 Docker 官网下载和安装的工具，比如 Docker 服务端和 Docker 客户端。
 
 ![docker](pic/docker.jpg)
@@ -23,6 +26,7 @@ setns() – 把某进程加入到某个namespace <br>
 该项目在 2017 年于 Austin 举办的 DockerCon 上正式命名为 Moby 项目。由于这次改名，GitHub 上的 docker/docker 库也被转移到了 [moby/moby](https://github.com/moby/moby)。
 
 ### Test Environment Prepare
+
 使用docker构建了Ubuntu 16.04镜像，并在此基础上添加了gcc编译器。
 Dockerfile如下：
 ```
@@ -49,6 +53,7 @@ docker run -v $PWD/code:/opt/project --name demoShow --privileged -it lbbxsxlz/u
 --privileged  特权模式，此主题中的验证都需要此特权。
 
 ## clone call
+
 看下clone系统调用的代码，后续验证的代码均已此为基础。
 ```
 #define _GNU_SOURCE
@@ -94,6 +99,7 @@ int main()
 上面的程序和pthread基本上是一样的玩法。但是，对于上面的程序，父子进程的进程空间是没有什么差别的，父进程能访问到的子进程也能。
 
 ## UTS Namespace
+
 ```
 int container_main(void* arg)
 {
@@ -120,6 +126,7 @@ int main()
 ![uts](pic/uts.jpg)
 
 ## IPC Namespace
+
 IPC全称 Inter-Process Communication，是Unix/Linux下进程间通信的一种方式，IPC有共享内存、信号量、消息队列等方法。为了隔离，我们也需要把IPC给隔离开来，这样，只有在同一个Namespace下的进程才能相互通信。IPC需要有一个全局的ID，即然是全局的，那么就意味着我们的Namespace需要对这个ID隔离，不能让别的Namespace的进程看到。
 
 要启动IPC隔离，我们只需要在调用clone时加上CLONE_NEWIPC参数就可以了。
@@ -149,6 +156,7 @@ int main()
 ![ipc3](pic/ipc3.jpg)
 
 ## PID Namespace
+
 在uts隔离的基础上修改程序。
 ```
 int container_main(void* arg)
@@ -344,9 +352,11 @@ int main()
 我们用了一个pipe来对父子进程进行同步，为什么要这样做？因为子进程中有一个execv的系统调用，这个系统调用会把当前子进程的进程空间给全部覆盖掉，我们希望在execv之前就做好user namespace的uid/gid的映射，这样，execv运行的/bin/bash就会因为我们设置了uid为0的inside-uid而变成#号的提示符。
 
 程序的运行结果：
+
 ![user](pic/user.jpg)
 
 以上程序是在宿主机上运行的，并不是在容器中运行的。
 
 ## summarize
+
 以上是本次主题分享的内容，主要介绍了五种Namespace隔离机制，未涉及到Network Namespace，这个以后有机会再分享吧。另外NameSpace涉及到不少系统调用与用户权限相关的内容，这部分内容需要积累沉淀，一起加油哈！

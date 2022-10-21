@@ -10,6 +10,10 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 sudo docker info
 ```
+
+docker component download address   Ubuntu-18.04
+https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/
+
 ## 卸载docker
 ```
 sudo apt-get purge docker-ce docker-ce-cli containerd.io
